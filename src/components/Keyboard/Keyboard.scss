@@ -1,0 +1,39 @@
+@use "../../colors" as color;
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+
+  font-size: 1.5rem;
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__key {
+    border-radius: 4px;
+    background: darkgray;
+    // margin: 4px;
+    margin: 2px;
+    padding: 1rem 0.5rem;
+    min-width: 2rem;
+    text-align: center;
+    cursor: pointer;
+
+    &--correct {
+      background-color: color.$correct;
+    }
+
+    &--wrongLocation {
+      background-color: color.$wrongLocation;
+    }
+
+    &--incorrect {
+      color: white;
+      background: color.$incorrect;
+    }
+  }
+}

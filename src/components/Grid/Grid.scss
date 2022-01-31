@@ -1,0 +1,47 @@
+@use "../../colors" as color;
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 1rem;
+
+  &__word {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__letter {
+    padding: 1rem;
+    border: solid 2px rgb(122, 122, 122);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: "\00a0";
+      display: block;
+    }
+
+    &--correctLocation {
+      border: none;
+      background: color.$correct;
+      border-color: color.$correct;
+    }
+
+    &--correctWrongLocation {
+      background: color.$wrongLocation;
+      border-color: color.$wrongLocation;
+    }
+
+    &--incorrect {
+      color: white;
+      background: color.$incorrect;
+      border-color: color.$incorrect;
+    }
+  }
+}
