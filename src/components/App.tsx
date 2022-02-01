@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Grid } from "./Grid";
+import { Header } from "./Header";
 import { Keyboard } from "./Keyboard";
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
 
   return (
     <div id="container">
+      <Header />
       <Grid
         answer={answer}
         guesses={guesses}
