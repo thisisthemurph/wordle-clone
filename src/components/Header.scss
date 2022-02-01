@@ -1,22 +1,8 @@
-// .header {
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-around;
-//   align-items: center;
-
-//   border-bottom: 1px solid lightblue;
-
-//   &__title {
-//     color: white;
-//     width: 33%;
-//     border: solid 1px white;
-//   }
-// }
-
 .header {
   display: grid;
   grid-template-columns: 0.5fr 1fr 0.5fr;
   border-bottom: solid 1px lightslategray;
+  width: 100vw;
 
   &__title {
     color: white;

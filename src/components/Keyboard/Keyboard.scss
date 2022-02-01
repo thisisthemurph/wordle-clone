@@ -4,9 +4,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 0;
+  padding-bottom: 1rem;
 
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 
   &__row {
     display: flex;
@@ -16,10 +16,9 @@
   &__key {
     border-radius: 4px;
     background: darkgray;
-    // margin: 4px;
     margin: 2px;
     padding: 1rem 0.5rem;
-    min-width: 2rem;
+    min-width: 1rem;
     text-align: center;
     cursor: pointer;
 
