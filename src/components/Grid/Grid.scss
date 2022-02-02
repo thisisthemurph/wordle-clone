@@ -1,19 +1,26 @@
 @use "../../colors" as color;
 
 .grid {
+  $grid-max-size: 500px;
+
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-evenly;
-  padding: 1rem;
 
-  max-width: 430px;
+  max-width: $grid-max-size;
+  max-height: $grid-max-size;
 
   &__word {
+    $padding: 0.5rem;
+    $max-square-size: calc($grid-max-size / 6 - $padding);
+    $square-size: minmax(auto, $max-square-size);
+
     display: grid;
-    grid-template-columns: repeat(5, 50px);
-    grid-template-rows: 50px;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    grid-template-columns: repeat(5, $square-size);
+    grid-template-rows: $square-size;
+    gap: $padding;
+    margin-bottom: $padding;
   }
 
   &__letter {
