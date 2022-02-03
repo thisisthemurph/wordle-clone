@@ -11,7 +11,7 @@ html {
 *,
 *:before,
 *:after {
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
 
 // Global styling
@@ -32,6 +32,16 @@ body {
   justify-content: space-between;
   flex-direction: column;
 }
+
+// #container {
+//   height: 100vh;
+//   display: grid;
+//   grid-template-columns: 1fr;
+//   grid-template-rows: 1fr 6fr 3fr;
+//   align-items: center;
+
+//   justify-content: center;
+// }
 
 .iconButton {
   height: 2rem;

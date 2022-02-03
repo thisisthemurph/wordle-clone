@@ -7,15 +7,29 @@ const makeKeyboardObject = (
   enter: () => void,
   del: () => void
 ): KeyObject[][] => {
-  const letterToKeyObject = (letter: string) => {
+  const letterToKeyObject = (letter: string): KeyObject => {
     return {
       value: letter,
+      specialKey: false,
+      primaryKey: false,
       action: () => setGuess(letter),
     };
   };
 
-  const delKey = { value: "\u2190", action: () => del() };
-  const enterKey = { value: "\u2713", action: () => enter() };
+  const delKey = {
+    value: "\u2190",
+    specialKey: true,
+    primaryKey: false,
+    action: () => del(),
+  };
+
+  const enterKey = {
+    value: "\u2713",
+    specialKey: true,
+    primaryKey: true,
+    action: () => enter(),
+  };
+
   const keys = [
     Array.from("qwertyuiop").map((letter) => letterToKeyObject(letter)),
     Array.from("asdfghjkl").map((letter) => letterToKeyObject(letter)),
@@ -47,11 +61,11 @@ export const Keyboard = ({
   wrongLocationLetters,
   incorrectLetters,
 }: KeyboardProps) => {
-  const keys = makeKeyboardObject(setGuess, enter, del);
+  const keyRows = makeKeyboardObject(setGuess, enter, del);
 
   return (
     <div className="keyboard">
-      {keys.map((keys, idx) => {
+      {keyRows.map((keys, idx) => {
         return (
           <KeySet
             key={idx}

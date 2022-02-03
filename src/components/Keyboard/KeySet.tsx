@@ -1,4 +1,4 @@
-import { Key, KeyObject, KeyStyle } from "./Key";
+import { Key, KeyObject } from "./Key";
 
 interface KeySetProps {
   keys: KeyObject[];
@@ -15,26 +15,18 @@ export const KeySet = ({
   wrongLocationLetters,
   incorrectLetters,
 }: KeySetProps) => {
-  const getKeyStyle = (keyValue: string): KeyStyle => {
-    if (correctLetters.includes(keyValue)) {
-      return KeyStyle.Correct;
-    } else if (wrongLocationLetters.includes(keyValue)) {
-      return KeyStyle.WrongLocation;
-    } else if (incorrectLetters.includes(keyValue)) {
-      return KeyStyle.Incorrect;
-    }
-
-    return KeyStyle.Normal;
-  };
-
   return (
     <div className="keyboard__row">
       {keys.map((key) => (
         <Key
-          key={key.value}
-          value={key.value}
-          action={canType ? key.action : () => {}}
-          style={getKeyStyle(key.value)}
+          keyItem={key}
+          // value={key.value}
+          // action={canType ? key.action : () => {}}
+          // style={getKeyStyle(key.value)}
+          canType={canType}
+          correctLetters={correctLetters}
+          wrongLocationLetters={wrongLocationLetters}
+          incorrectLetters={incorrectLetters}
         />
       ))}
     </div>

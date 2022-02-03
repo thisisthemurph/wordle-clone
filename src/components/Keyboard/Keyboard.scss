@@ -3,23 +3,40 @@
 .keyboard {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding-bottom: 1rem;
+  min-height: 200px;
 
-  font-size: 1.25rem;
+  width: 100%;
+  padding: 1rem 0 1.5rem 0;
+  background: #202425;
 
   &__row {
     display: flex;
-    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 0.3rem;
+
+    &:nth-child(2) {
+      width: 90%;
+    }
   }
 
   &__key {
-    border-radius: 4px;
-    background: darkgray;
+    $shadow-height: 0.15rem;
+
+    color: white;
+    background: #646667;
+    border-radius: 5px;
+    box-shadow: #414040 0rem $shadow-height;
+
+    padding: 15px;
     margin: 2px;
-    padding: 1rem 0.5rem;
-    min-width: 1rem;
+    width: 100%;
+    min-width: 2rem;
+
     text-align: center;
+    text-transform: uppercase;
     cursor: pointer;
 
     &--correct {
@@ -33,6 +50,23 @@
     &--incorrect {
       color: white;
       background: color.$incorrect;
+    }
+
+    &--special {
+      background: #404042;
+      min-width: 45px;
+      // margin: 0 1rem;
+    }
+
+    &--primary {
+      color: black;
+      background: #d3d5d7;
+    }
+
+    &:hover,
+    &:active {
+      transform: translateY($shadow-height);
+      box-shadow: none;
     }
   }
 }
