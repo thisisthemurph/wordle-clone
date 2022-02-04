@@ -1,11 +1,20 @@
+@use "../colors" as color;
+
 .header {
-  display: grid;
-  grid-template-columns: 0.5fr 1fr 0.5fr;
-  border-bottom: solid 1px lightslategray;
+  display: flex;
+  justify-content: center;
+  border-bottom: solid 1px darken(color.$text, 25%);
   width: 100vw;
 
+  &__container {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    width: 100%;
+    max-width: 500px;
+  }
+
   &__title {
-    color: white;
+    color: color.$text;
     text-align: center;
   }
 
@@ -14,5 +23,14 @@
     align-items: center;
     padding: 1rem;
     justify-content: space-between;
+  }
+
+  .iconButton {
+    width: 60%;
+    max-width: 50px;
+
+    .icon {
+      width: 100%;
+    }
   }
 }

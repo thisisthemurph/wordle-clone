@@ -1,9 +1,18 @@
 $green: rgb(54, 134, 63);
 $orange: rgb(228, 114, 15);
-$gray: rgb(109, 109, 109);
+$gray: rgb(68, 68, 68);
 
-$background: rgb(33, 33, 33);
+$text: white;
+$background: rgb(32, 36, 37);
 
 $correct: $green;
 $wrongLocation: $orange;
 $incorrect: $gray;
+
+// Keyboard colors
+
+$kb-text: white;
+$kb-background: rgb(100, 102, 103);
+$kb-background-special: rgb(64, 64, 66);
+$kb-background-primary: rgb(211, 213, 215);
+$kb-shadow: rgb(65, 64, 64);

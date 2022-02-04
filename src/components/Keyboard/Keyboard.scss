@@ -7,9 +7,9 @@
   align-items: center;
   min-height: 200px;
 
-  width: 100%;
-  padding: 1rem 0 1.5rem 0;
-  background: #202425;
+  width: 95%;
+  max-width: 650px;
+  padding: 1rem 0 1rem 0;
 
   &__row {
     display: flex;
@@ -25,10 +25,10 @@
   &__key {
     $shadow-height: 0.15rem;
 
-    color: white;
-    background: #646667;
+    color: color.$kb-text;
+    background: color.$kb-background;
     border-radius: 5px;
-    box-shadow: #414040 0rem $shadow-height;
+    box-shadow: color.$kb-shadow 0rem $shadow-height;
 
     padding: 15px;
     margin: 2px;
@@ -48,19 +48,17 @@
     }
 
     &--incorrect {
-      color: white;
       background: color.$incorrect;
     }
 
     &--special {
-      background: #404042;
+      background: color.$kb-background-special;
       min-width: 45px;
-      // margin: 0 1rem;
     }
 
     &--primary {
       color: black;
-      background: #d3d5d7;
+      background: color.$kb-background-primary;
     }
 
     &:hover,

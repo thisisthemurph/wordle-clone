@@ -48,7 +48,6 @@ function App() {
   const checkForWin = () => {
     if (guesses[guesses.length - 1] === answer) {
       setAllowInput(false);
-      alert("Winner!");
     }
   };
 

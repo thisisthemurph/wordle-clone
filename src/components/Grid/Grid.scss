@@ -1,7 +1,7 @@
 @use "../../colors" as color;
 
 .grid {
-  $grid-max-size: 500px;
+  $grid-max-size: 60vh;
 
   display: flex;
   flex-direction: column;
@@ -11,10 +11,11 @@
   margin: auto;
   max-width: $grid-max-size;
   max-height: $grid-max-size;
+  padding-top: 1.5rem;
 
   &__word {
     $padding: 0.5rem;
-    $max-square-size: calc($grid-max-size / 6 - $padding);
+    $max-square-size: calc($grid-max-size / 7 - $padding);
     $square-size: minmax(auto, $max-square-size);
 
     display: grid;
@@ -32,6 +33,7 @@
     color: white;
     font-size: 1.5rem;
     border: solid 2px rgb(122, 122, 122);
+    text-transform: uppercase;
 
     &--correctLocation {
       border: none;
