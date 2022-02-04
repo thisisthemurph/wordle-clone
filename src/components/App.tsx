@@ -1,16 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid } from "./Grid";
 import { Header } from "./Header";
 import { Keyboard } from "./Keyboard";
 
+import { ApiReader } from "../words/ApiReader";
+import { Words } from "../words/Words";
+
 function App() {
-  const answer = "ghost";
+  const [answer, setAnswer] = useState<string | null>(null);
   const [guesses, setGuesses] = useState<string[]>([""]);
   const [allowInput, setAllowInput] = useState(true);
 
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const [wrongLocLetters, setWrongLocLetters] = useState<string[]>([]);
   const [incorrectLetters, setIncorrectLetters] = useState<string[]>([]);
+
+  const reader = new ApiReader("http://localhost:3001");
+  const words = new Words(reader);
+
+  useEffect(() => {
+    const fetchWord = async () => {
+      setAnswer(await words.getRandomWord());
+    };
+
+    fetchWord();
+  }, []);
 
   const inputLetter = (letter: string) => {
     let currentGuess = guesses[guesses.length - 1];
@@ -39,6 +53,8 @@ function App() {
   };
 
   const setKeyboardLetters = (currentGuess: string) => {
+    if (answer === null) return;
+
     const correct = [];
     const wrongLocation = [];
     const incorrect = [];
@@ -68,6 +84,10 @@ function App() {
     setKeyboardLetters(currentGuess);
     checkForWin();
   };
+
+  if (answer === null) {
+    return <p>Fetching wordle!</p>;
+  }
 
   return (
     <div id="container">
