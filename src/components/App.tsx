@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Grid } from "./Grid";
 import { Header } from "./Header";
 import { Keyboard } from "./Keyboard";
-import { Dialog, DialogBody, DialogHeader } from "./Dialog";
 
 import { ApiReader } from "../words/ApiReader";
 import { Words } from "../words/Words";
@@ -34,7 +33,7 @@ function App() {
     incorrectLetters: [],
   });
 
-  const [showAboutDialog, setShowAboutDialog] = useState(true);
+  const [showAboutDialog, setShowAboutDialog] = useState(false);
   const [showStatsDialog, setShowStatsDialog] = useState(false);
 
   const reader = new ApiReader("http://localhost:3001");
@@ -48,6 +47,12 @@ function App() {
 
     fetchWord();
   }, []);
+
+  useEffect(() => {
+    if (!gameState.allowInput) {
+      setShowStatsDialog(true);
+    }
+  }, [gameState.allowInput]);
 
   /**
    * Determines if the game has been won
