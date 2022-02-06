@@ -6,85 +6,129 @@ import { Keyboard } from "./Keyboard";
 import { ApiReader } from "../words/ApiReader";
 import { Words } from "../words/Words";
 
-function App() {
-  const [answer, setAnswer] = useState<string | null>(null);
-  const [guesses, setGuesses] = useState<string[]>([""]);
-  const [allowInput, setAllowInput] = useState(true);
+interface GameState {
+  answer: string;
+  guesses: string[];
+  allowInput: boolean;
+  correctLetters: string[];
+  wrongLocationLetters: string[];
+  incorrectLetters: string[];
+}
 
-  const [correctLetters, setCorrectLetters] = useState<string[]>([]);
-  const [wrongLocLetters, setWrongLocLetters] = useState<string[]>([]);
-  const [incorrectLetters, setIncorrectLetters] = useState<string[]>([]);
+type LetterAssociations = {
+  correct: string[];
+  wrongLocation: string[];
+  incorrect: string[];
+};
+
+function App() {
+  const [gameState, setGameState] = useState<GameState>({
+    answer: "",
+    guesses: [""],
+    allowInput: true,
+    correctLetters: [],
+    wrongLocationLetters: [],
+    incorrectLetters: [],
+  });
 
   const reader = new ApiReader("http://localhost:3001");
   const words = new Words(reader);
 
   useEffect(() => {
     const fetchWord = async () => {
-      setAnswer(await words.getRandomWord());
+      const answer = await words.getRandomWord();
+      setGameState({ ...gameState, answer });
     };
 
     fetchWord();
   }, []);
 
-  const inputLetter = (letter: string) => {
+  /**
+   * Determines if the game has been won
+   * @returns true if game is won, else false
+   */
+  const gameIsWon = (): boolean => {
+    const { answer, guesses } = gameState;
+    return guesses[guesses.length - 1] !== answer;
+  };
+
+  /**
+   * Determines the correct, wrong location, and icorrectly guessed letters
+   * @param currentGuess the current/last guess made by the user
+   * @returns a LetterAssociation object containing the determined letters
+   */
+  const getLetterAssociations = (currentGuess: string): LetterAssociations => {
+    const associations: LetterAssociations = {
+      correct: [],
+      wrongLocation: [],
+      incorrect: [],
+    };
+
+    if (!gameState.answer) return associations;
+
+    for (let i = 0; i < currentGuess.length; i++) {
+      const letter = currentGuess[i];
+
+      if (letter === gameState.answer[i]) {
+        associations.correct.push(letter);
+      } else if (gameState.answer.includes(letter)) {
+        associations.wrongLocation.push(letter);
+      } else {
+        associations.incorrect.push(letter);
+      }
+    }
+
+    return associations;
+  };
+
+  const handleKeyboardInput = (letter: string) => {
+    const { guesses } = gameState;
+
     let currentGuess = guesses[guesses.length - 1];
     if (currentGuess.length === 5) {
       return;
     }
 
-    setGuesses([...guesses.slice(0, -1), currentGuess + letter]);
+    setGameState({
+      ...gameState,
+      guesses: [...guesses.slice(0, -1), currentGuess + letter],
+    });
   };
 
-  const deleteLastLetter = () => {
+  const handleKeyboardDelete = () => {
+    const { guesses } = gameState;
+
     let currentGuess = guesses[guesses.length - 1];
     if (currentGuess.length === 0) {
       return;
     }
 
     const parts = Array.from(currentGuess).slice(0, -1);
-    setGuesses([...guesses.slice(0, -1), parts.join("")]);
+    setGameState({
+      ...gameState,
+      guesses: [...guesses.slice(0, -1), parts.join("")],
+    });
   };
 
-  const checkForWin = () => {
-    if (guesses[guesses.length - 1] === answer) {
-      setAllowInput(false);
-    }
-  };
+  const handleSubmitGuess = () => {
+    const { guesses } = gameState;
 
-  const setKeyboardLetters = (currentGuess: string) => {
-    if (answer === null) return;
-
-    const correct = [];
-    const wrongLocation = [];
-    const incorrect = [];
-
-    for (let i = 0; i < currentGuess.length; i++) {
-      const letter = currentGuess[i];
-
-      if (letter === answer[i]) {
-        correct.push(letter);
-      } else if (answer.includes(letter)) {
-        wrongLocation.push(letter);
-      } else {
-        incorrect.push(letter);
-      }
-    }
-
-    setCorrectLetters([...correctLetters, ...correct]);
-    setWrongLocLetters([...wrongLocLetters, ...wrongLocation]);
-    setIncorrectLetters([...incorrectLetters, ...incorrect]);
-  };
-
-  const submitGuess = () => {
-    let currentGuess = guesses[guesses.length - 1];
+    const currentGuess = guesses[guesses.length - 1];
     if (!(currentGuess.length === 5)) return;
 
-    setGuesses([...guesses, ""]);
-    setKeyboardLetters(currentGuess);
-    checkForWin();
+    const letterAssociations = getLetterAssociations(currentGuess);
+
+    setGameState({
+      ...gameState,
+      guesses: [...guesses, ""],
+      correctLetters: letterAssociations.correct,
+      wrongLocationLetters: letterAssociations.wrongLocation,
+      incorrectLetters: letterAssociations.incorrect,
+      allowInput: gameIsWon(),
+    });
   };
 
-  if (answer === null) {
+  if (!gameState.answer) {
     return <p>Fetching wordle!</p>;
   }
 
@@ -92,18 +136,18 @@ function App() {
     <div id="container">
       <Header />
       <Grid
-        answer={answer}
-        guesses={guesses}
-        activeIndex={guesses.length - 1}
+        answer={gameState.answer}
+        guesses={gameState.guesses}
+        activeIndex={gameState.guesses.length - 1}
       />
       <Keyboard
-        setGuess={inputLetter}
-        enter={submitGuess}
-        del={deleteLastLetter}
-        canType={allowInput}
-        correctLetters={correctLetters}
-        wrongLocationLetters={wrongLocLetters}
-        incorrectLetters={incorrectLetters}
+        setGuess={handleKeyboardInput}
+        enter={handleSubmitGuess}
+        del={handleKeyboardDelete}
+        canType={gameState.allowInput}
+        correctLetters={gameState.correctLetters}
+        wrongLocationLetters={gameState.wrongLocationLetters}
+        incorrectLetters={gameState.incorrectLetters}
       />
     </div>
   );
