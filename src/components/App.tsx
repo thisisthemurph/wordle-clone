@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { Grid } from "./Grid";
 import { Header } from "./Header";
 import { Keyboard } from "./Keyboard";
+import { Dialog, DialogBody, DialogHeader } from "./Dialog";
 
 import { ApiReader } from "../words/ApiReader";
 import { Words } from "../words/Words";
+import { AboutDialog } from "./AboutDialog";
+import { StatsDialog } from "./StatsDislog";
 
 interface GameState {
   answer: string;
@@ -30,6 +33,9 @@ function App() {
     wrongLocationLetters: [],
     incorrectLetters: [],
   });
+
+  const [showAboutDialog, setShowAboutDialog] = useState(true);
+  const [showStatsDialog, setShowStatsDialog] = useState(false);
 
   const reader = new ApiReader("http://localhost:3001");
   const words = new Words(reader);
@@ -134,7 +140,20 @@ function App() {
 
   return (
     <div id="container">
-      <Header />
+      <StatsDialog
+        showDialog={showStatsDialog}
+        setShowDialog={setShowStatsDialog}
+      />
+
+      <AboutDialog
+        showDialog={showAboutDialog}
+        setShowDialog={setShowAboutDialog}
+      />
+
+      <Header
+        toggleAbout={() => setShowAboutDialog(!showAboutDialog)}
+        toggleStats={() => setShowStatsDialog(!showStatsDialog)}
+      />
       <Grid
         answer={gameState.answer}
         guesses={gameState.guesses}

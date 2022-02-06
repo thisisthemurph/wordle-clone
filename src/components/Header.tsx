@@ -1,12 +1,17 @@
 import "./Header.scss";
 import { BarChartIcon, InfoIcon, SettingsIcon } from "../icons";
 
-export const Header = () => {
+interface HeaderProps {
+  toggleAbout: () => void;
+  toggleStats: () => void;
+}
+
+export const Header = ({ toggleAbout, toggleStats }: HeaderProps) => {
   return (
     <header className="header">
       <div className="header__container">
         <section>
-          <button className="iconButton aboutBtn">
+          <button className="iconButton aboutBtn" onClick={toggleAbout}>
             <InfoIcon />
           </button>
         </section>
@@ -14,7 +19,7 @@ export const Header = () => {
         <h1 className="header__title">WORDLE</h1>
 
         <section>
-          <button className="iconButton">
+          <button className="iconButton" onClick={toggleStats}>
             <BarChartIcon />
           </button>
           <button className="iconButton">
