@@ -1,5 +1,3 @@
-import { match } from "assert";
-import { useState } from "react";
 import { LetterField, LetterState } from "./LetterField";
 
 interface WordFieldProps {
