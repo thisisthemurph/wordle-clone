@@ -19,7 +19,6 @@ export enum GameStage {
 export const initialGameState: GameState = {
   answer: "",
   guesses: [""],
-  // allowInput: false,
   correctLetters: [],
   wrongLocationLetters: [],
   incorrectLetters: [],

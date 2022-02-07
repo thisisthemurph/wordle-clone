@@ -1,3 +1,5 @@
+@use "../../colors" as color;
+
 .dialog {
   position: fixed;
   top: 50vh;
@@ -75,5 +77,40 @@
 
   &__body {
     font-size: 0.9rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+
+  &__button {
+    $action-color: lighten(color.$primary, 15%);
+    transition: 200ms ease-in-out;
+    cursor: pointer;
+
+    color: white;
+    background-color: color.$primary;
+    border: 1px solid color.$primary;
+    border-radius: 4px;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+
+    &:hover {
+      background: $action-color;
+      border-color: $action-color;
+    }
+
+    &--outlined {
+      color: color.$primary;
+      background: none;
+
+      &:hover {
+        background: rgba($action-color, 20%);
+        color: $action-color;
+        border-color: $action-color;
+      }
+    }
   }
 }

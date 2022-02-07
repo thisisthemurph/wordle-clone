@@ -7,7 +7,11 @@ import { ApiReader } from "../words/ApiReader";
 import { Words } from "../words/Words";
 import { AboutDialog } from "./AboutDialog";
 import { StatsDialog } from "./StatsDislog";
-import { GameStage, useGameState } from "../hooks/useGameState";
+import {
+  GameStage,
+  initialGameState,
+  useGameState,
+} from "../hooks/useGameState";
 
 type LetterAssociations = {
   correct: string[];
@@ -149,6 +153,7 @@ function App() {
       <StatsDialog
         showDialog={showStatsDialog}
         setShowDialog={setShowStatsDialog}
+        resetGame={() => setGameState(initialGameState)}
       />
 
       <AboutDialog
