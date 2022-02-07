@@ -7,15 +7,7 @@ import { ApiReader } from "../words/ApiReader";
 import { Words } from "../words/Words";
 import { AboutDialog } from "./AboutDialog";
 import { StatsDialog } from "./StatsDislog";
-
-interface GameState {
-  answer: string;
-  guesses: string[];
-  allowInput: boolean;
-  correctLetters: string[];
-  wrongLocationLetters: string[];
-  incorrectLetters: string[];
-}
+import { GameStage, useGameState } from "../hooks/useGameState";
 
 type LetterAssociations = {
   correct: string[];
@@ -24,15 +16,7 @@ type LetterAssociations = {
 };
 
 function App() {
-  const [gameState, setGameState] = useState<GameState>({
-    answer: "",
-    guesses: [""],
-    allowInput: true,
-    correctLetters: [],
-    wrongLocationLetters: [],
-    incorrectLetters: [],
-  });
-
+  const [gameState, setGameState] = useGameState();
   const [showAboutDialog, setShowAboutDialog] = useState(false);
   const [showStatsDialog, setShowStatsDialog] = useState(false);
 
@@ -42,26 +26,26 @@ function App() {
   useEffect(() => {
     const fetchWord = async () => {
       const answer = await words.getRandomWord();
-      setGameState({ ...gameState, answer });
+      setGameState({
+        ...gameState,
+        answer,
+        gameStage: GameStage.GameInProgress,
+      });
     };
 
-    fetchWord();
-  }, []);
+    if (gameState.gameStage === GameStage.GameLoading) {
+      fetchWord();
+    }
+  }, [gameState.gameStage]);
 
   useEffect(() => {
-    if (!gameState.allowInput) {
+    if (
+      gameState.gameStage === GameStage.GameWon ||
+      gameState.gameStage === GameStage.GameLost
+    ) {
       setShowStatsDialog(true);
     }
-  }, [gameState.allowInput]);
-
-  /**
-   * Determines if the game has been won
-   * @returns true if game is won, else false
-   */
-  const gameIsWon = (): boolean => {
-    const { answer, guesses } = gameState;
-    return guesses[guesses.length - 1] !== answer;
-  };
+  }, [gameState.gameStage]);
 
   /**
    * Determines the correct, wrong location, and icorrectly guessed letters
@@ -122,6 +106,23 @@ function App() {
   };
 
   const handleSubmitGuess = () => {
+    /**
+     * Determines if the game has been won
+     * @returns true if game is won, else false
+     */
+    const getGameStage = (): GameStage => {
+      const { answer, guesses } = gameState;
+      const lastGuess = guesses[guesses.length - 1];
+
+      if (lastGuess === answer) {
+        return GameStage.GameWon;
+      } else if (guesses.length === 6 && lastGuess.length === 5) {
+        return GameStage.GameLost;
+      } else {
+        return GameStage.GameInProgress;
+      }
+    };
+
     const { guesses } = gameState;
 
     const currentGuess = guesses[guesses.length - 1];
@@ -135,11 +136,11 @@ function App() {
       correctLetters: letterAssociations.correct,
       wrongLocationLetters: letterAssociations.wrongLocation,
       incorrectLetters: letterAssociations.incorrect,
-      allowInput: gameIsWon(),
+      gameStage: getGameStage(),
     });
   };
 
-  if (!gameState.answer) {
+  if (gameState.gameStage === GameStage.GameLoading) {
     return <p>Fetching wordle!</p>;
   }
 
@@ -168,7 +169,7 @@ function App() {
         setGuess={handleKeyboardInput}
         enter={handleSubmitGuess}
         del={handleKeyboardDelete}
-        canType={gameState.allowInput}
+        canType={gameState.gameStage === GameStage.GameInProgress}
         correctLetters={gameState.correctLetters}
         wrongLocationLetters={gameState.wrongLocationLetters}
         incorrectLetters={gameState.incorrectLetters}

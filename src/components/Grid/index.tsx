@@ -15,7 +15,7 @@ export const Grid = ({ guesses, answer, activeIndex }: GridProps) => {
           key={idx}
           answer={answer}
           guess={guess}
-          isActive={idx === activeIndex}
+          isActive={idx === guesses.length - 1}
         />
       ))}
       {[...Array(6 - guesses.length)].map((_, idx) => (
